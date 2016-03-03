@@ -27,3 +27,6 @@ S(3, 3) = 3;
 N = size(S, 1);
 M = size(S, 2);
 dx = Lx/M;
+
+
+generateBVector(S, Win, Tinf, km, ke, h, Lx, Ly, Lz, Pp)
