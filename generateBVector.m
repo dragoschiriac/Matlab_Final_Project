@@ -32,46 +32,47 @@ for (r = 1:N)
         
         % *** Look to cell above this cell ***
         if (r == 1)  % element is on top edge
-            
+            B(i) = B(i) - h*(Tinf)*dy/km;
         elseif (S(r-1,c) == 3) % on the edge of the pipe
-            
+            B(i)= B(i)- Win*dx/(ke*Pp*Lz);
         else % both elements are in interior
-            
+            B(i)= B(i)- 0;
         end
         
         % *** Look to the cell to the right of this cell ***
         if (c == M)  % element is on right edge
-            
+            B(i) = B(i) - h*(Tinf)*dy/km;
         elseif (S(r,c+1) == 3) % on the edge of the pipe
-            
+            B(i)= B(i)- Win*dx/(ke*Pp*Lz)
         else  % both elements are in interior
-            
+            B(i)= B(i)- 0;
         end
         
         % *** Look to the cell to the left of this cell ***
         if (c == 1)  % element is on left edge
-            B(i)=B(i)- h*(Tinf)*dy/km;
+            B(i)= B(i)- h*(Tinf)*dy/km;
         elseif (S(r,c-1) == 3) % on the edge of the pipe
-            
+            B(i)= B(i)- Win*dx/(ke*Pp*Lz)
         else  % both elements are in interior
-            
+            B(i)= B(i)- 0;
         end
        
         
         % *** Look to cell below this cell ***
         if (r == N)  % element is on bottom edge
-            
+            B(i) = B(i) - h*(Tinf)*dy/km;
         elseif (S(r+1,c) == 3) % on the edge of the pipe
-            
+            B(i)= B(i)- Win*dx/(ke*Pp*Lz)
         else  % both elements are in interior
-            
+            B(i)= B(i)- 0;
         end
         
         
         
         % If we are a pipe element, set T_i = 20
         if (S(r, c) == 3) % we are a pipe element
-            
+            B(i) = 20;
         end
     end % next column in S
 end % next row in S
+
