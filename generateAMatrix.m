@@ -30,38 +30,42 @@ for (r = 1:N)
         
         % *** Look to cell above this cell ***
         if (r == 1)  % element is on top edge
-            
+            A(i, i) = A(i, i) - h*dx/km;
         elseif (S(r-1,c) == 3)    % element on the boundary of the pipe    
-             
+            A(i, i) = A(i, i) - Win*dx/(km*Pp*Lz);
         else  % both elements are in interior
-
+            A(i, i) = A(i, i) - 1;
+            A(i, i-M) = A(i, i-M) + 1;
         end
         
         % *** Look to the cell to the right of this cell ***
         if (c == M)  % element is on right edge
-
+            A(i, i) = A(i, i) - h*dx/km;
         elseif (S(r,c+1) == 3) % element on the boundary of the pipe
-            
+            A(i, i) = A(i, i) - Win*dx/(km*Pp*Lz);
         else  % both elements are in interior
-
+            A(i, i) = A(i, i) - 1;
+            A(i, i+1) = A(i, i+1) + 1;
         end
         
         % *** Look to the cell to the left of this cell ***
         if (c == 1)  % element is on left edge
-
+            A(i, i) = A(i, i) - h*dx/km;
         elseif (S(r,c-1) == 3)  % element on the boundary of the pipe   
-         
+            A(i, i) = A(i, i) - Win*dx/(km*Pp*Lz);
         else  % both elements are in interior
-
+            A(i, i) = A(i, i) - 1;
+            A(i, i-1) = A(i, i-1) + 1;
         end
         
         % *** Look to cell below this cell ***
         if (r == N)  % element is on bottom edge
-
+            A(i, i) = A(i, i) - h*dx/km;
         elseif (S(r+1,c) == 3) % element on the boundary of the pipe
-           
+            A(i, i) = A(i, i) - Win*dx/(km*Pp*Lz);
         else  % both elements are in interior
-
+            A(i, i) = A(i, i) - 1;
+            A(i, i+M) = A(i, i+M) + 1;
         end
 
         % If we are a pipe element, set T_i = 20
