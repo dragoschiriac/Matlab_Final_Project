@@ -56,13 +56,15 @@ A_given = [-2.4 , 1 , 0 , 0 , 0 , 1 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 
     0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 1 , 0 , 0 , 0 , 1 , -3.2 , 1;
     0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 1 , 0 , 0 , 0 , 1 , -2.4];
 
+%A_given = sparse(A_given);
+
 %assert(isequal(A,A_given))
 for (i = 1:length(A))
     for (j = 1:length(A))
         %fprintf('A(%.0f, %.0f) = %.1f A_given(%.0f, %.0f) = %0.1f\n', i, j, A(i,j), i, j, A_given(i,j))
         %assert(abs(A(i,j) - A_given(i,j)) < 10e-5)
         if (abs(A(i,j) - A_given(i,j)) > 10e-5)
-        fprintf('A(%.0f, %.0f) = %.1f A_given(%.0f, %.0f) = %0.1f\n', i, j, A(i,j), i, j, A_given(i,j))
+            fprintf('A(%.0f, %.0f) = %.1f A_given(%.0f, %.0f) = %0.1f\n', i, j, A(i,j), i, j, A_given(i,j))
         end
     end
 end

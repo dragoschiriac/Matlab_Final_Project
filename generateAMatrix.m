@@ -35,7 +35,7 @@ for (r = 1:N)
             A(i, i) = A(i, i) - Win*dx/(km*Pp*Lz);
         else  % both elements are in interior
             A(i, i) = A(i, i) - 1;
-            A(i, i-M) = A(i, i-M) + 1;
+            A(i, i-N) = A(i, i-N) + 1;
         end
         
         % *** Look to the cell to the right of this cell ***
@@ -65,7 +65,7 @@ for (r = 1:N)
             A(i, i) = A(i, i) - Win*dx/(km*Pp*Lz);
         else  % both elements are in interior
             A(i, i) = A(i, i) - 1;
-            A(i, i+M) = A(i, i+M) + 1;
+            A(i, i+N) = A(i, i+N) + 1;
         end
 
         % If we are a pipe element, set T_i = 20
