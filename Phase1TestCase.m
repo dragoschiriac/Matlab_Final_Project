@@ -68,3 +68,37 @@ for (i = 1:length(A))
         end
     end
 end
+
+S = ones(10, 10);% pipe all steel
+S(5:6,5:6) = 3;% pipe in center fifth, 10/5 = 2 units wide
+A = generateAMatrix(S, Win, Tinf, km, ke, h, Lx, Ly, Lz, Pp);
+B = generateBVector(S, Win, Tinf, km, ke, h, Lx, Ly, Lz, Pp);
+Tm = plotTemperatures(S, Win, Tinf, km, ke, h, Lx, Ly, Lz, Pp);
+
+Tm_given = [34.2 35.6 36.9 38.0 38.7 38.7 38.0 36.9 35.6 34.2;...
+35.6 37.2 38.8 40.3 41.2 41.2 40.3 38.8 37.2 35.6;
+36.9 38.8 40.9 43.1 44.6 44.6 43.1 40.9 38.8 36.9;
+38.0 40.3 43.1 46.4 49.7 49.7 46.4 43.1 40.3 38.0;
+38.7 41.2 44.6 49.7 20 20 49.7 44.6 41.2 38.7;
+38.7 41.2 44.6 49.7 20 20 49.7 44.6 41.2 38.7;
+38.0 40.3 43.1 46.4 49.7 49.7 46.4 43.1 40.3 38.0;
+36.9 38.8 40.9 43.1 44.6 44.6 43.1 40.9 38.8 36.9;
+35.6 37.2 38.8 40.3 41.2 41.2 40.3 38.8 37.2 35.6;
+34.2 35.6 36.9 38.0 38.7 38.7 38.0 36.9 35.6 34.2];
+
+for (i = 1:length(Tm))
+    for (j = 1:length(Tm))
+        %fprintf('A(%.0f, %.0f) = %.1f A_given(%.0f, %.0f) = %0.1f\n', i, j, A(i,j), i, j, A_given(i,j))
+        %assert(abs(A(i,j) - A_given(i,j)) < 10e-5)
+        %Tm(i,j) - Tm_given(i,j)
+        if (abs(Tm(i,j) - Tm_given(i,j)) > 10e-2)
+            fprintf('Tm(%.0f, %.0f) = %.1f Tm_given(%.0f, %.0f) = %0.1f\n', i, j, Tm(i,j), i, j, Tm_given(i,j))
+        end
+    end
+end
+
+S = ones(100, 100); % pipe all steel
+S(41:60, 41:60) = 3; % pipe in center fifth, 100/5 = 20 units wide
+A = generateAMatrix(S, Win, Tinf, km, ke, h, Lx, Ly, Lz, Pp);
+B = generateBVector(S, Win, Tinf, km, ke, h, Lx, Ly, Lz, Pp);
+Tm = plotTemperatures(S, Win, Tinf, km, ke, h, Lx, Ly, Lz, Pp);
