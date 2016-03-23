@@ -29,19 +29,26 @@ for (r = 1:N)
     for (c = 1:M)
         % Get the number of this element, from 1..N*M
         i = (r-1)*M + c;
-        
         % *** Look to cell above this cell ***
         if (r == 1)  % element is on top edge
-            B(i) = B(i) - h*(Tinf)*dy/km;
+            if(S(r,c) == 2) %if the element is fluid
+                B(i) = B(i) - ke*(Tinf)/km;
+            else %the element is metal
+                B(i) = B(i) - h*(Tinf)*dy/km;
+            end
         elseif (S(r-1,c) == 3) % on the edge of the pipe
             B(i)= B(i)- Win*dx/(km*Pp*Lz);
-        else % both elements are in interior
+        else % both elements are in interior 
             B(i)= B(i)- 0;
         end
         
         % *** Look to the cell to the right of this cell ***
         if (c == M)  % element is on right edge
-            B(i) = B(i) - h*(Tinf)*dy/km;
+            if(S(r,c) == 2) %if the element is fluid
+                B(i) = B(i) - ke*(Tinf)/km;
+            else %if the element is metal
+                B(i) = B(i) - h*(Tinf)*dy/km;
+            end
         elseif (S(r,c+1) == 3) % on the edge of the pipe
             B(i)= B(i)- Win*dx/(km*Pp*Lz);
         else  % both elements are in interior
@@ -50,7 +57,11 @@ for (r = 1:N)
         
         % *** Look to the cell to the left of this cell ***
         if (c == 1)  % element is on left edge
-            B(i)= B(i)- h*(Tinf)*dy/km;
+            if(S(r,c) == 2) %if the element is fluid
+                B(i) = B(i) - ke*(Tinf)/km;
+            else %if the element is metal
+                B(i) = B(i) - h*(Tinf)*dy/km;
+            end
         elseif (S(r,c-1) == 3) % on the edge of the pipe
             B(i)= B(i)- Win*dx/(km*Pp*Lz);
         else  % both elements are in interior
@@ -60,7 +71,11 @@ for (r = 1:N)
         
         % *** Look to cell below this cell ***
         if (r == N)  % element is on bottom edge
-            B(i) = B(i) - h*(Tinf)*dy/km;
+            if(S(r,c) == 2) %if the element is fluid
+                B(i) = B(i) - ke*(Tinf)/km;
+            else %if the element is metal
+                B(i) = B(i) - h*(Tinf)*dy/km;
+            end
         elseif (S(r+1,c) == 3) % on the edge of the pipe
             B(i)= B(i)- Win*dx/(km*Pp*Lz);
         else  % both elements are in interior

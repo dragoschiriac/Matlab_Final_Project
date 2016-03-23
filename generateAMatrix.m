@@ -1,5 +1,5 @@
 % Function to generate the A matrix for the two-material bin
-function A = generateAMatrix(S, Win, Tinf, km, ke, h, Lx, Ly, Lz, Pp)
+function A = generateAMatrix_3(S, Win, Tinf, km, ke, h, Lx, Ly, Lz, Pp)
 
 % Set a default A matrix the correct size (DxD = (NM) x (NM))
 N = size(S, 1);
@@ -23,51 +23,124 @@ if (max(max(S)) > 3 |  min(min(S)) < 1)
 end
 
 % Loop over the cells in the given plate, using r & c/row & column
-for (r = 1:N)
-    for (c = 1:M)
+for r = 1:N
+    for c = 1:M
+        
         % Get the number of this element, from 1..(N*M)
         i = (r-1)*M + c;
         
-        % *** Look to cell above this cell ***
-        if (r == 1)  % element is on top edge
-            A(i, i) = A(i, i) - h*dx/km;
-        elseif (S(r-1,c) == 3)    % element on the boundary of the pipe    
-            A(i, i) = A(i, i); % - Win*dx/(km*Pp*Lz)
-        else  % both elements are in interior
-            A(i, i) = A(i, i) - 1;
-            A(i, i-N) = A(i, i-N) + 1;
-        end
-        
-        % *** Look to the cell to the right of this cell ***
-        if (c == M)  % element is on right edge
-            A(i, i) = A(i, i) - h*dx/km;
-        elseif (S(r,c+1) == 3) % element on the boundary of the pipe
-            A(i, i) = A(i, i) ;% - Win*dx/(km*Pp*Lz)
-        else  % both elements are in interior
-            A(i, i) = A(i, i) - 1;
-            A(i, i+1) = A(i, i+1) + 1;
-        end
-        
-        % *** Look to the cell to the left of this cell ***
-        if (c == 1)  % element is on left edge
-            A(i, i) = A(i, i) - h*dx/km;
-        elseif (S(r,c-1) == 3)  % element on the boundary of the pipe   
-            A(i, i) = A(i, i) ; % - Win*dx/(km*Pp*Lz)
-        else  % both elements are in interior
-            A(i, i) = A(i, i) - 1;
-            A(i, i-1) = A(i, i-1) + 1;
-        end
-        
-        % *** Look to cell below this cell ***
-        if (r == N)  % element is on bottom edge
-            A(i, i) = A(i, i) - h*dx/km;
-        elseif (S(r+1,c) == 3) % element on the boundary of the pipe
-            A(i, i) = A(i, i) ; % - Win*dx/(km*Pp*Lz)
-        else  % both elements are in interior
-            A(i, i) = A(i, i) - 1;
-            A(i, i+N) = A(i, i+N) + 1;
-        end
+        if (S(r,c)==1)% we are a metal element %%%%%%NEW CODE%%%%%%%%%
 
+            % *** Look to cell above this cell ***
+            if (r == 1)  % element is on top edge (metal - environment)
+                A(i, i) = A(i, i) - h*dx/km;
+            elseif (S(r-1,c) == 3)    % element on the boundary of the pipe (direct heat source)    
+                A(i, i) = A(i, i); % - Win*dx/(km*Pp*Lz)
+            elseif (S(r-1,c) == 1)  % both elements are in interior metal-metal
+                A(i, i) = A(i, i) - 1;
+                A(i, i-N) = A(i, i-N) + 1;
+            elseif  (S(r-1,c) == 2) %element is below fluid (metal-fluid)%%%NEW CODE%%%
+                A(i,i) = A(i,i) - h*dx/km;
+                A(i, i-N) = A(i, i-N) + h*dx/km;
+            end
+            
+            % *** Look to the cell to the right of this cell ***
+            if (c == M)  % element is on right edge (metal - environment)
+                A(i, i) = A(i, i) - h*dx/km;
+            elseif (S(r,c+1) == 3) % element on the boundary of the pipe (direct heat source)
+                A(i, i) = A(i, i) ;% - Win*dx/(km*Pp*Lz)
+            elseif  (S(r,c+1) == 1)% both elements are in interior (metal-metal)
+                A(i, i) = A(i, i) - 1;
+                A(i, i+1) = A(i, i+1) + 1;
+            elseif (S(r,c+1) == 2) % element to the right is fluid%%%NEW CODE%%%
+                A(i, i) = A(i, i) - h*dx/km;
+                A(i, i+1) = A(i, i+1) + h*dx/km;
+
+            end
+
+            % *** Look to the cell to the left of this cell ***
+            if (c == 1)  % element is on left edge (meta- environment)
+                A(i, i) = A(i, i) - h*dx/km;
+            elseif (S(r,c-1) == 3)  % element on the boundary of the pipe (direct heat source)  
+                A(i, i) = A(i, i) ; % - Win*dx/(km*Pp*Lz)
+            elseif (S(r,c-1) == 1)  % both elements are in interior (metal-metal)
+                A(i, i) = A(i, i) - 1;
+                A(i, i-1) = A(i, i-1) + 1;
+            elseif (S(r,c-1) ==2) %element to left is fluid%%%NEW CODE%%%
+                A(i, i) = A(i, i) - h*dx/km;
+                A(i, i-1) = A(i, i-1) + h*dx/km;
+                
+            end
+
+            % *** Look to cell below this cell ***
+            if (r == N)  % element is on bottom edge
+                A(i, i) = A(i, i) - h*dx/km;
+            elseif (S(r+1,c) == 3) % element on the boundary of the pipe
+                A(i, i) = A(i, i) ; % - Win*dx/(km*Pp*Lz)
+            elseif (S(r+1,c) == 1)  % both elements are in interior (metal-metal)
+                A(i, i) = A(i, i) - 1;
+                A(i, i+N) = A(i, i+N) + 1;
+            elseif (S(r+1,c) ==2) %element to left is fluid%%%NEW CODE%%%
+                A(i, i) = A(i, i) - h*dx/km;
+                A(i, i+N) = A(i, i+N) + h*dx/km;
+            end
+        
+        elseif (S(r,c)==2) %We are a fluid element %%%NEW CODE%%%
+            
+            
+            % *** Look to cell above this cell ***
+            if (r == 1)  % element is on top edge (fluid - environment)
+                A(i, i) = A(i, i) - ke/km;
+            elseif (S(r-1,c) == 3)    % element on the boundary of the pipe (direct heat source)    
+                A(i, i) = A(i, i); % - Win*dx/(km*Pp*Lz)
+            elseif (S(r-1,c) == 1)  % both elements are in interior cell above is metal (fluid-metal)
+                A(i, i) = A(i, i) - h*dx/km;
+                A(i, i-N) = A(i, i-N) + h*dx/km;
+            elseif (S(r-1,c) == 2) %element above is fluid (fluid-fluid)
+                A(i, i) = A(i, i) - ke/km;
+                A(i, i-N) = A(i, i-N) + ke/km;
+            end
+            
+            % *** Look to the cell to the right of this cell ***
+            if (c == M)  % element is on right edge
+                A(i, i) = A(i, i) - ke/km;
+            elseif (S(r,c+1) == 3) % element on the boundary of the pipe
+                A(i, i) = A(i, i) ;% - Win*dx/(km*Pp*Lz)
+            elseif (S(r,c+1) == 1)  % both elements are in interior cell above is metal (fluid-metal)
+                A(i, i) = A(i, i) - h*dx/km;
+                A(i, i+1) = A(i, i+1) + h*dx/km;
+            elseif (S(r,c+1) == 2) %element above is fluid (fluid-fluid)
+                A(i, i) = A(i, i) - ke/km;
+                A(i, i+1) = A(i, i+1) + ke/km;
+            end
+            
+
+            % *** Look to the cell to the left of this cell ***
+            if (c == 1)  % element is on left edge
+                A(i, i) = A(i, i) - ke/km;
+            elseif (S(r,c-1) == 3)  % element on the boundary of the pipe   
+                A(i, i) = A(i, i) ; % - Win*dx/(km*Pp*Lz)
+            elseif (S(r,c-1) == 1)  % both elements are in interior cell above is metal (fluid-metal)
+                A(i, i) = A(i, i) - h*dx/km;
+                A(i, i-1) = A(i, i-1) + h*dx/km;
+            else %(S(r,c-1) == 2) element above is fluid (fluid-fluid)
+                A(i, i) = A(i, i) - ke/km;
+                A(i, i-1) = A(i, i-1) + ke/km;
+            end
+            
+            % *** Look to cell below this cell ***
+            if (r == N)  % element is on bottom edge
+                A(i, i) = A(i, i) - ke/km;
+            elseif (S(r+1,c) == 3) % element on the boundary of the pipe
+                A(i, i) = A(i, i) ; % - Win*dx/(km*Pp*Lz)
+            elseif (S(r+1,c) == 1)  % both elements are in interior cell above is metal (fluid-metal)
+                A(i, i) = A(i, i) - h*dx/km;
+                A(i, i+N) = A(i, i+N) + h*dx/km;
+            else %(S(r+1,c) == 2) element above is fluid (fluid-fluid)
+                A(i, i) = A(i, i) - ke/km;
+                A(i, i+N) = A(i, i+N) + ke/km;
+            end
+        end
         % If we are a pipe element, set T_i = 20
         if (S(r, c) == 3) % we are a pipe element
             A(i, :) = 0;
@@ -75,3 +148,4 @@ for (r = 1:N)
         end
     end % next column in S
 end % next row in S
+
