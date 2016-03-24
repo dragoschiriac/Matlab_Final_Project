@@ -1,3 +1,4 @@
+% Animation for final Project 
 close all;
 clc
 clear;
@@ -36,3 +37,31 @@ dx = Lx/N;
 
 % Plot the starting design, with no cuts in it
 Tm = plotTemperatures(S, Win, Tinf, km, ke, h, Lx, Ly, Lz, Pp);
+
+for(i = 1:20)
+    S(i,10:12) = 2;
+    S(i,20:22) = 2;
+    S(i,40:42) = 2;
+    S(i,60:62) = 2;
+    S(76-i,10:12) = 2;
+    S(76-i,20:22) = 2;
+    S(76-i,40:42) = 2;
+    S(76-i,57:60) = 2;
+    Tm = plotTemperatures(S, Win, Tinf, km, ke, h, Lx, Ly, Lz, Pp);
+    F(i) = getframe;
+end 
+
+for(i = 1:27)
+    if(i <= 10)
+        S(11:15,76-i) = 2;
+        S(61:65,76-i) = 2;
+    end
+    S(23:25,76-i) = 2;
+    S(30:35,76-i) = 2;
+    S(48:53,76-i) = 2;
+    Tm = plotTemperatures(S, Win, Tinf, km, ke, h, Lx, Ly, Lz, Pp);
+    F(20+i) = getframe;
+end
+
+movie(F, 1);
+
