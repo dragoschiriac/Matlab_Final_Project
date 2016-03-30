@@ -37,9 +37,9 @@ dx = Lx/N;
 % Plot the starting design, with no cuts in it
 Tm = plotTemperatures(S, Win, Tinf, km, ke, h, Lx, Ly, Lz, Pp);
 
-T_avg = zeros(47,1);
-perMat = zeros(47,1);
-T_max = zeros(47,1);
+T_avg = ones(47,1)*50;
+% perMat = zeros(47,1);
+T_max = ones(47,1)*50;
 T_min = zeros(47,1);
 
 for(i = 1:47)
@@ -68,11 +68,18 @@ for(i = 1:47)
     Tm(indices) = [];
     z = size(Tm);
     T_avg(i) = sum(Tm)/(z(2));
-    %     perMat(i) = 1 - z(2)/(75^2);
+%     perMat(i) = 1 - z(2)/(75^2);
     T_max(i) = max(Tm(:));
     T_min(i) = min(Tm(:));
     
     title(['Maximum temperature = ', num2str(T_max(i)), ', Average temperature = ', num2str(T_avg(i))])
+    
+    if (T_max(i) == min(T_max))
+        text(-0.2, 0.075, ['smallest maximum temp'])
+    end
+    if (T_avg(i) == min(T_avg))
+        text(-0.2, 0.175, ['smallest average temp'])
+    end
     
     % [maxValue, linearIndexesOfMaxes] = max(A(:));
     % [rowsOfMaxes colsOfMaxes] = find(A == maxValue);
