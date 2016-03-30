@@ -63,12 +63,13 @@ for(i = 1:47)
         S(48:53,76-i+20) = 2;
     end
     Tm = plotTemperatures(S, Win, Tinf, km, ke, h, Lx, Ly, Lz, Pp);
-    
+    colormap(hot)
+        
     indices = find(S == 2 | S == 3);
     Tm(indices) = [];
     z = size(Tm);
     T_avg(i) = sum(Tm)/(z(2));
-%     perMat(i) = 1 - z(2)/(75^2);
+    %     perMat(i) = 1 - z(2)/(75^2);
     T_max(i) = max(Tm(:));
     T_min(i) = min(Tm(:));
     
@@ -80,9 +81,6 @@ for(i = 1:47)
     if (T_avg(i) == min(T_avg))
         text(-0.2, 0.175, ['smallest average temp'])
     end
-    
-    % [maxValue, linearIndexesOfMaxes] = max(A(:));
-    % [rowsOfMaxes colsOfMaxes] = find(A == maxValue);
     
     F(i) = getframe;
 end
