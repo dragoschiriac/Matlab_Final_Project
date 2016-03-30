@@ -37,9 +37,9 @@ dx = Lx/N;
 % Plot the starting design, with no cuts in it
 Tm = plotTemperatures(S, Win, Tinf, km, ke, h, Lx, Ly, Lz, Pp);
 
-T_avg = ones(47,1)*50;
-% perMat = zeros(47,1);
-T_max = ones(47,1)*50;
+T_avg = zeros(47,1);
+perMat = zeros(47,1);
+T_max = zeros(47,1);
 T_min = zeros(47,1);
 
 for(i = 1:47)
@@ -62,27 +62,36 @@ for(i = 1:47)
         S(30:35,76-i+20) = 2;
         S(48:53,76-i+20) = 2;
     end
+    
+    subplot(2,3,[1,2,4,5])
     Tm = plotTemperatures(S, Win, Tinf, km, ke, h, Lx, Ly, Lz, Pp);
-    colormap(hot)
-        
-    indices = find(S == 2 | S == 3);
+    indices = find(S == 2 | S==3);
     Tm(indices) = [];
     z = size(Tm);
     T_avg(i) = sum(Tm)/(z(2));
-    %     perMat(i) = 1 - z(2)/(75^2);
+    perMat(i) = 1 - z(2)/((75^2)*0.96);
     T_max(i) = max(Tm(:));
     T_min(i) = min(Tm(:));
-    
-    title(['Maximum temperature = ', num2str(T_max(i)), ', Average temperature = ', num2str(T_avg(i))])
-    
-    if (T_max(i) == min(T_max))
-        text(-0.2, 0.075, ['smallest maximum temp'])
-    end
-    if (T_avg(i) == min(T_avg))
-        text(-0.2, 0.175, ['smallest average temp'])
-    end
-    
+    subplot(2,3,3)
+    plot(perMat, T_max, '.');
+    xlim = ([0 0.2]);
+    ylim = ([20 60]);
+    title(['Maximum temperature = ', num2str(T_max(i))])
+    subplot(2,3,6)
+    plot(perMat, T_avg, '.');
+    xlim = ([0 0.2]);
+    ylim = ([20 60]);
+    title(['Average temperature = ', num2str(T_avg(i))])
     F(i) = getframe;
+   
+    % title('Maximum temperature = ', num2str(T_max, 1), 'Average temperature = ', num2str(T_avg, 1))
+    
+    % [maxValue, linearIndexesOfMaxes] = max(A(:));
+    % [rowsOfMaxes colsOfMaxes] = find(A == maxValue);
+    
 end
+
+
+
 
 
