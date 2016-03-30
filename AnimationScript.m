@@ -1,4 +1,3 @@
-% Animation for final Project 
 close all;
 clc
 clear;
@@ -47,9 +46,16 @@ for(i = 1:20)
     S(76-i,20:22) = 2;
     S(76-i,40:42) = 2;
     S(76-i,57:60) = 2;
+    
     Tm = plotTemperatures(S, Win, Tinf, km, ke, h, Lx, Ly, Lz, Pp);
+    
+    % [maxValue, linearIndexesOfMaxes] = max(A(:));
+    % [rowsOfMaxes colsOfMaxes] = find(A == maxValue);
+    %     T_max = max(T(:));
+    %     T_min = min(T(:));
+    %     text()
     F(i) = getframe;
-end 
+end
 
 for(i = 1:27)
     if(i <= 10)
@@ -64,4 +70,5 @@ for(i = 1:27)
 end
 
 movie(F, 1);
+
 
