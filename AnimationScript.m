@@ -37,36 +37,48 @@ dx = Lx/N;
 % Plot the starting design, with no cuts in it
 Tm = plotTemperatures(S, Win, Tinf, km, ke, h, Lx, Ly, Lz, Pp);
 
-for(i = 1:20)
-    S(i,10:12) = 2;
-    S(i,20:22) = 2;
-    S(i,40:42) = 2;
-    S(i,60:62) = 2;
-    S(76-i,10:12) = 2;
-    S(76-i,20:22) = 2;
-    S(76-i,40:42) = 2;
-    S(76-i,57:60) = 2;
-    
+T_avg = zeros(47,1);
+perMat = zeros(47,1);
+T_max = zeros(47,1);
+T_min = zeros(47,1);
+
+for(i = 1:47)
+    if (i <= 20)
+        S(i,10:12) = 2;
+        S(i,20:22) = 2;
+        S(i,40:42) = 2;
+        S(i,60:62) = 2;
+        S(76-i,10:12) = 2;
+        S(76-i,20:22) = 2;
+        S(76-i,40:42) = 2;
+        S(76-i,57:60) = 2;
+    end
+    if (i > 20)
+        if (i <= 30)
+            S(11:15,76-i+20) = 2;
+            S(61:65,76-i+20) = 2;
+        end
+        S(23:25,76-i+20) = 2;
+        S(30:35,76-i+20) = 2;
+        S(48:53,76-i+20) = 2;
+    end
     Tm = plotTemperatures(S, Win, Tinf, km, ke, h, Lx, Ly, Lz, Pp);
+    
+    %     indices = find(S == 2 || S == 3);
+    %     Tm(indices) = [];
+    %     z = size(Tm);
+    %     T_avg(i) = sum(Tm)/(z(2));
+    %     perMat(i) = 1 - z(2)/(75^2);
+    T_max(i) = max(Tm(:));
+    T_min(i) = min(Tm(:));
+    
+    title(['Maximum temperature = ', num2str(T_max(i))])
+    % title('Maximum temperature = ', num2str(T_max, 1), 'Average temperature = ', num2str(T_avg, 1))
     
     % [maxValue, linearIndexesOfMaxes] = max(A(:));
     % [rowsOfMaxes colsOfMaxes] = find(A == maxValue);
-    %     T_max = max(T(:));
-    %     T_min = min(T(:));
-    %     text()
+    
     F(i) = getframe;
-end
-
-for(i = 1:27)
-    if(i <= 10)
-        S(11:15,76-i) = 2;
-        S(61:65,76-i) = 2;
-    end
-    S(23:25,76-i) = 2;
-    S(30:35,76-i) = 2;
-    S(48:53,76-i) = 2;
-    Tm = plotTemperatures(S, Win, Tinf, km, ke, h, Lx, Ly, Lz, Pp);
-    F(20+i) = getframe;
 end
 
 movie(F, 1);
