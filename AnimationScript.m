@@ -72,22 +72,31 @@ for(i = 1:47)
     perMat(i) = 1 - z(2)/((75^2)*0.96);
     T_max(i) = max(Tm(:));
     T_min(i) = min(Tm(:));
+%     if (T_max(i) == min(T_max))
+%         text(-0.2, 0.075, ['smallest maximum temp'])
+%     end
+%     if (T_avg(i) == min(T_avg))
+%         text(-0.2, 0.175, ['smallest average temp'])
+%     end
+    title(['Maximum temperature = ', num2str(T_max(i))])
+    
+    
+    
     subplot(2,3,3)
     plot(perMat, T_max, '.');
-    xlim = ([0 0.2]);
-    ylim = ([20 60]);
+    xlim([0 0.2])
+    ylim([20 60])
     title(['Maximum temperature = ', num2str(T_max(i))])
+    
+    
     subplot(2,3,6)
     plot(perMat, T_avg, '.');
-    xlim = ([0 0.2]);
-    ylim = ([20 60]);
+    xlim([0 0.2])
+    ylim([20 60])
     title(['Average temperature = ', num2str(T_avg(i))])
+    
     F(i) = getframe;
    
-    % title('Maximum temperature = ', num2str(T_max, 1), 'Average temperature = ', num2str(T_avg, 1))
-    
-    % [maxValue, linearIndexesOfMaxes] = max(A(:));
-    % [rowsOfMaxes colsOfMaxes] = find(A == maxValue);
     
 end
 
