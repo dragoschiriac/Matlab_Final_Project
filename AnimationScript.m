@@ -64,23 +64,20 @@ for(i = 1:47)
     end
     Tm = plotTemperatures(S, Win, Tinf, km, ke, h, Lx, Ly, Lz, Pp);
     
-    %     indices = find(S == 2 || S == 3);
-    %     Tm(indices) = [];
-    %     z = size(Tm);
-    %     T_avg(i) = sum(Tm)/(z(2));
+    indices = find(S == 2 | S == 3);
+    Tm(indices) = [];
+    z = size(Tm);
+    T_avg(i) = sum(Tm)/(z(2));
     %     perMat(i) = 1 - z(2)/(75^2);
     T_max(i) = max(Tm(:));
     T_min(i) = min(Tm(:));
     
-    title(['Maximum temperature = ', num2str(T_max(i))])
-    % title('Maximum temperature = ', num2str(T_max, 1), 'Average temperature = ', num2str(T_avg, 1))
+    title(['Maximum temperature = ', num2str(T_max(i)), ', Average temperature = ', num2str(T_avg(i))])
     
     % [maxValue, linearIndexesOfMaxes] = max(A(:));
     % [rowsOfMaxes colsOfMaxes] = find(A == maxValue);
     
     F(i) = getframe;
 end
-
-movie(F, 1);
 
 
