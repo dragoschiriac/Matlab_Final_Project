@@ -85,12 +85,12 @@ for(i = 1:47)
     title(['Maximum temperature = ', num2str(T_max(i))])
     %text(0.05, 43, ['smallest maximum temp'])
     if (i > 3)
-        if (T_max(i) > T_max(i-1) & T_max(i-2) > T_max(i-1))
-            t = text(0.01, 43, ['smallest maximum temp'])
+        if (T_max(i) > T_max(i-1) & T_max(i-2) > T_max(i-1) & T_max(i-1) == min(T_max))
+            t = text(0.01, 43, ['smallest maximum temp']);
             t.FontSize = 12;
             t.Color = [0,0,1];
             t.FontWeight = 'bold';
-            t 
+            t
             pause(2)
         end
     end
@@ -102,12 +102,12 @@ for(i = 1:47)
     ylim([30 50])
     title(['Average temperature = ', num2str(T_avg(i))])
     if (i > 3)
-        if (T_avg(i) > T_avg(i-1) & T_avg(i-2) > T_avg(i-1))
+        if (T_avg(i) > T_avg(i-1) & T_avg(i-2) > T_avg(i-1) & T_avg(i-1) == min(T_avg));
             t = text(0.01, 43, ['smallest average temp']);
             t.FontSize = 12;
             t.Color = [0,0,1];
             t.FontWeight = 'bold';
-            t 
+            t
             pause(2)
         end
     end
