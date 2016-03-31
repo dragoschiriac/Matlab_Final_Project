@@ -37,31 +37,32 @@ dx = Lx/N;
 % Plot the starting design, with no cuts in it
 Tm = plotTemperatures(S, Win, Tinf, km, ke, h, Lx, Ly, Lz, Pp);
 
-T_avg = zeros(47,1);
+T_avg = ones(47,1)*100;
 perMat = zeros(47,1);
-T_max = zeros(47,1);
+T_max = ones(47,1)*100;
 T_min = zeros(47,1);
 
 for(i = 1:47)
     if (i <= 20)
-        S(i,10:12) = 2;
-        S(i,20:22) = 2;
-        S(i,40:42) = 2;
-        S(i,60:62) = 2;
-        S(76-i,10:12) = 2;
-        S(76-i,20:22) = 2;
-        S(76-i,40:42) = 2;
-        S(76-i,57:60) = 2;
+        S(10:12,i) = 2;
+        S(20:22,i) = 2;
+        S(40:42,i) = 2;
+        S(60:62,i) = 2;
+        S(10:12,76-i) = 2;
+        S(20:22,76-i) = 2;
+        S(40:42,76-i) = 2;
+        S(57:60,76-i) = 2;
     end
     if (i > 20)
         if (i <= 30)
-            S(11:15,76-i+20) = 2;
-            S(61:65,76-i+20) = 2;
+            S(76-i+20,11:15) = 2;
+            S(76-i+20,61:65) = 2;
         end
-        S(23:25,76-i+20) = 2;
-        S(30:35,76-i+20) = 2;
-        S(48:53,76-i+20) = 2;
+        S(76-i+20,23:25) = 2;
+        S(76-i+20,30:35) = 2;
+        S(76-i+20,48:53) = 2;
     end
+    
     
     subplot(2,3,[1,2,4,5])
     Tm = plotTemperatures(S, Win, Tinf, km, ke, h, Lx, Ly, Lz, Pp);
@@ -72,28 +73,30 @@ for(i = 1:47)
     perMat(i) = 1 - z(2)/((75^2)*0.96);
     T_max(i) = max(Tm(:));
     T_min(i) = min(Tm(:));
-%     if (T_max(i) == min(T_max))
-%         text(-0.2, 0.075, ['smallest maximum temp'])
-%     end
-%     if (T_avg(i) == min(T_avg))
-%         text(-0.2, 0.175, ['smallest average temp'])
-%     end
-    title(['Maximum temperature = ', num2str(T_max(i))])
+    
+    
     
     
     
     subplot(2,3,3)
     plot(perMat, T_max, '.');
     xlim([0 0.2])
-    ylim([20 60])
+    ylim([40 60])
     title(['Maximum temperature = ', num2str(T_max(i))])
+    %text(0.05, 43, ['smallest maximum temp'])
+    if (T_max(i) == min(T_max))
+        text(0.05, 43, ['smallest maximum temp'])
+    end
     
     
     subplot(2,3,6)
     plot(perMat, T_avg, '.');
     xlim([0 0.2])
-    ylim([20 60])
+    ylim([30 50])
     title(['Average temperature = ', num2str(T_avg(i))])
+    if (T_avg(i) == min(T_avg))
+        text(0.05, 43, ['smallest average temp'])
+    end
     
     F(i) = getframe;
    
